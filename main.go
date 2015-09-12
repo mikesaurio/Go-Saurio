@@ -1,10 +1,23 @@
 package main
 
-import "fmt"
+import (
+    "fmt"
+    "net/http"
+)
 
-func main(){
-	var name string
-	fmt.Println("Escribe tu nombre: ")
-	fmt.Scan(&name)
-	fmt.Println("Hola", name)
+type Hello struct{
+NAME string
 }
+
+func (h Hello) ServeHTTP(
+    w http.ResponseWriter,
+    r *http.Request) {
+    fmt.Fprint(w, "¡Hola!" , h.NAME)
+}
+
+func main() {
+    var h Hello
+    h.NAME = "Mike"
+    http.ListenAndServe("localhost:4000", h)
+}
+
